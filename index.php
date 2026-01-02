@@ -1,15 +1,9 @@
 <?php
-// コードベースのファイルのオートロード
-spl_autoload_extensions(".php");
-spl_autoload_register(function($class) {
-    $file = __DIR__ . '/'  . str_replace('\\', '/', $class). '.php';
-    if (file_exists($file)) include($file);
-});
-
-// composerの依存関係のオートロード
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Helpers\RandomGenerator;
+use Users\User;
+use Users\Employee;
 
 // クエリ文字列からパラメータを取得
 $min = $_GET['min'] ?? 5;

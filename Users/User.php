@@ -1,9 +1,10 @@
 <?php
-namespace Models;
+namespace Users;
 
 use DateTime;
+use Shared\Interfaces\FileConvertible;
 
-abstract class User {
+abstract class User implements FileConvertible {
     private int $id;
     private string $firstName;
     private string $lastName;
@@ -70,10 +71,10 @@ abstract class User {
         );
     }
 
-    public function toHTML() {
+    public function toHTML(): string{
         return sprintf("
             <div class='user-card'>
-                <div class='avatar'>SAMPLE</div>
+                <div class='avatar'>User</div>
                 <h2>%s %s</h2>
                 <p>%s</p>
                 <p>%s</p>
@@ -93,7 +94,7 @@ abstract class User {
         );
     }
 
-    public function toMarkdown() {
+    public function toMarkdown() : string {
         return "## User: {$this->firstName} {$this->lastName}
                  - Email: {$this->email}
                  - Phone Number: {$this->phoneNumber}
@@ -103,7 +104,7 @@ abstract class User {
                  - Role: {$this->role}";
     }
 
-    public function toArray() {
+    public function toArray(): array {
         return [
             'id' => $this->id,
             'firstName' => $this->firstName,
@@ -116,5 +117,33 @@ abstract class User {
             'isActive' => $this->isActive,
             'role' => $this->role
         ];
+    }
+}
+
+class BasicUser extends User
+{
+    public function __construct(
+        int $id,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $password,
+        string $phoneNumber,
+        string $address,
+        DateTime $birthDate,
+        DateTime $membershipExpirationDate
+    ) {
+        parent::__construct(
+            $id,
+            $firstName,
+            $lastName,
+            $email,
+            $password,
+            $phoneNumber,
+            $address,
+            $birthDate,
+            $membershipExpirationDate,
+            'user'
+        );
     }
 }
