@@ -109,4 +109,9 @@ class RestaurantLocation implements FileConvertible {
     public function getEmployees(): array {
         return $this->employees;
     }
+
+    public function getLocations(): array 
+    {
+        return [$this];
+    }
 }

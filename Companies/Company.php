@@ -111,4 +111,9 @@ abstract class Company implements FileConvertible {
             'totalEmployees' => $this->totalEmployees,
         ];
     }
+
+    public function getName(): string 
+    {
+        return $this->name;
+    }
 }
