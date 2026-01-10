@@ -7,19 +7,20 @@ use Shared\Interfaces\FileConvertible;
 
 class RestaurantChain extends Company implements FileConvertible {
     private int $chainId;
-    private RestaurantLocation $restaurantLocation;
     private string $cuisineType;
     private int $numberOfLocations;
     private bool $hasDriveThru;
     private int $yearFounded;
     private string $parentCompany;
+    private array $locations = [];
 
     public function __construct(
         string $name, float $foundingYear, string $description,
         string $website, string $phone, string $industry,
         string $ceo, bool $isPubliclyTraded, string $country,
         string $founder, int $totalEmployees,
-        int $chainId, RestaurantLocation $restaurantLocation,
+        int $chainId,
+        ?RestaurantLocation $restaurantLocation,
         string $cuisineType, int $numberOfLocations,
         bool $hasDriveThru, int $yearFounded, string $parentCompany
     ) {
@@ -30,12 +31,15 @@ class RestaurantChain extends Company implements FileConvertible {
             $founder, $totalEmployees
         );
         $this->chainId = $chainId;
-        $this->restaurantLocation = $restaurantLocation;
         $this->cuisineType = $cuisineType;
         $this->numberOfLocations = $numberOfLocations;
         $this->hasDriveThru = $hasDriveThru;
         $this->yearFounded = $yearFounded;
         $this->parentCompany = $parentCompany;
+
+        if ($restaurantLocation !== null) {
+            $this->addLocation($restaurantLocation);
+        }
     }
 
     public function toString(): string {
@@ -89,5 +93,17 @@ class RestaurantChain extends Company implements FileConvertible {
             'yearFounded' => $this->yearFounded,
             'parentCompany' => $this->parentCompany
         ]);
+    }
+
+    public function addLocation(RestaurantLocation $location): void
+    {
+        $this->locations[] = $location;
+        // Keep the count consistent with the owned locations list.
+        $this->numberOfLocations = count($this->locations);
+    }
+
+    public function getLocations(): array 
+    {
+        return $this->locations;
     }
 }

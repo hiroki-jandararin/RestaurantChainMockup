@@ -6,6 +6,9 @@ use Users\User;
 use Users\BasicUser;
 use Users\Employee;
 use Companies\Company;
+use Restaurants\RestaurantLocation;
+use Restaurants\RestaurantChain;
+use DateTime;
 
 class RandomGenerator {
     public static function createUserData(): array{
@@ -19,8 +22,9 @@ class RandomGenerator {
             'password' => $faker->password,
             'phoneNumber' => $faker->phoneNumber,
             'address' => $faker->address,
-            'birthDate' => $faker->dateTimeThisCentury,
-            'membershipExpirationDate' => $faker->dateTimeBetween('-10 years', '+20 years'),
+            'birthDate' => new DateTime($faker->date('Y-m-d')),
+            'isActive' => $faker->boolean(),
+            'membershipExpirationDate' => new DateTime($faker->date('Y-m-d', '+20 years')),
         ];
     }
 
@@ -36,8 +40,8 @@ class RandomGenerator {
             $user['phoneNumber'],
             $user['address'],
             $user['birthDate'],
-            $user['membershipExpirationDate'],
-            $user['role']
+            $user['isActive'],
+            $user['membershipExpirationDate']
         );
     }
 
@@ -73,8 +77,8 @@ class RandomGenerator {
             $employee['phoneNumber'],
             $employee['address'],
             $employee['birthDate'],
+            $employee['isActive'],
             $employee['membershipExpirationDate'],
-            $employee['role'],
             $employee['jobTitle'],
             $employee['salary'],
             $employee['startDate'],
@@ -176,14 +180,15 @@ class RandomGenerator {
         return $restaurantLocations;
     }
 
-    public static function restaurantChain(): restaurantChain{
+    public static function restaurantChain(): RestaurantChain{
         $faker = Factory::create();
 
+        $restaurantChain = self::createCompanyData();
+
         $restaurantChain['chainId'] = $faker->randomNumber();
-        $restaurantChain['restaurantLocation'] = self::restaurantLocation();
+        $restaurantChain['restaurantLocation'] = null;
         $restaurantChain['cuisineType'] = $faker->word();
-        $restaurantChain['numberOfLocations'] = $faker->numberBetween(1,
-    100);
+        $restaurantChain['numberOfLocations'] = 0;
         $restaurantChain['hasDriveThru'] = $faker->boolean();
         $restaurantChain['yearFounded'] = $faker->year();
         $restaurantChain['parentCompany'] = $faker->company();
@@ -194,8 +199,8 @@ class RandomGenerator {
             $restaurantChain['description'],
             $restaurantChain['website'],
             $restaurantChain['phone'],
-            $restaurantChain['ceo'],
             $restaurantChain['industry'],
+            $restaurantChain['ceo'],
             $restaurantChain['isPubliclyTraded'],
             $restaurantChain['country'],
             $restaurantChain['founder'],
@@ -209,4 +214,30 @@ class RandomGenerator {
             $restaurantChain['parentCompany']
         );
     }
+
+public static function restaurantChains(int $min, int $max): array
+{
+    $count = rand($min, $max);
+    $chains = [];
+
+    for ($i = 0; $i < $count; $i++) {
+        $chain = self::restaurantChain();
+
+        $locCount = rand(1, 3);
+        for ($j = 0; $j < $locCount; $j++) {
+            $loc = self::restaurantLocation();
+
+            $empCount = rand(1, 3);
+            for ($k = 0; $k < $empCount; $k++) {
+                $loc->addEmployee(self::employee()); 
+            }
+
+            $chain->addLocation($loc);
+        }
+
+        $chains[] = $chain;
+    }
+
+    return $chains;
+}
 }

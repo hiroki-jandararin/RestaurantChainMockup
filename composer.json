@@ -6,7 +6,10 @@
     "psr-4": {
       "Users\\": "Users/",
       "Helpers\\": "Helpers/",
-      "Shared\\": "Shared/"
+      "Shared\\": "Shared/",
+      "Companies\\": "Companies/",
+      "Employees\\": "Employees/",
+      "Restaurants\\": "Restaurants/"
     },
     "files": [
       "Users/User.php"

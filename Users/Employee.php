@@ -1,7 +1,7 @@
 <?php
 
 namespace Users;
-use Models\User;
+use Users\User;
 
 class Employee extends User{
     private string $jobTitle;
@@ -18,7 +18,8 @@ class Employee extends User{
         string $phoneNumber, 
         string $address,
         \DateTime $birthDate,
-         \DateTime $membershipExpirationDate,
+        bool $isActive,
+        \DateTime $membershipExpirationDate,
         string $jobTitle, 
         float $salary, 
         string $startDate,
@@ -27,7 +28,7 @@ class Employee extends User{
         parent::__construct(
             $id, $firstName, $lastName, $email,
             $password, $phoneNumber, $address,
-            $birthDate, $membershipExpirationDate, 'employee'
+            $birthDate, $isActive, $membershipExpirationDate, 'employee'
         );
         $this->jobTitle = $jobTitle;
         $this->salary = $salary;
